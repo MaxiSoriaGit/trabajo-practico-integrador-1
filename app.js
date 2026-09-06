@@ -12,6 +12,6 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.listen(PORT, async () => {
-  await startDB();
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
+        await startDB();
+    console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
