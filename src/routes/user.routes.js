@@ -15,6 +15,7 @@ import {
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { adminMiddleware } from "../middlewares/admin.middleware.js";
 
+
 export const userRouter = Router();
 
 userRouter.get("/users", authMiddleware, adminMiddleware, getAllUsers);
