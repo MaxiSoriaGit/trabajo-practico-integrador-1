@@ -10,14 +10,24 @@ export const ArticleTagModel = sequelize.define(
         type: DataTypes.INTEGER,
         allowNull: false,
         references: { model: "Articles", key: "id" },
+        onDelete: "CASCADE", // si el articulo se borra de verdad, desaparecen sus vinculos
     },
     tag_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: { model: "Tags", key: "id" },
+        onDelete: "CASCADE", // si la etiqueta se borra de verdad, desaparecen sus vinculos
     },
     },
-    { tableName: "ArticlesTags" }
+    {
+    tableName: "ArticlesTags",
+    indexes: [
+        {
+        unique: true,
+        fields: ["article_id", "tag_id"], // impide que un articulo tenga la misma etiqueta dos veces
+        },
+    ],
+    }
 );
 
 // relacion N:M
@@ -32,7 +42,6 @@ TagModel.belongsToMany(ArticleModel, {
     as: "articles",
 });
 
-// eliminacion en cascada: al borrar un articulo se borran sus ArticleTag
-ArticleModel.beforeDestroy(async (article) => {
-    await ArticleTagModel.destroy({ where: { article_id: article.id } });
-});
+// No hace falta beforeDestroy:
+// - Article es paranoid, destroy() solo pone deletedAt y el vinculo sigue siendo valido
+// - si el articulo llega a borrarse fisicamente, el CASCADE lo resuelve la base de datos

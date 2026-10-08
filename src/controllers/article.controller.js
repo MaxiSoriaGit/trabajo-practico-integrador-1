@@ -102,7 +102,7 @@ export const updateArticle = async (req, res) => {
 
 export const deleteArticle = async (req, res) => {
     try {
-    await req.article.destroy(); // eliminacion logica + cascada de ArticleTag
+    await req.article.destroy(); // eliminacion logica (paranoid): solo marca deletedAt, conserva las etiquetas
     return res.status(200).json({ message: "Articulo eliminado correctamente" });
     } catch (error) {
     console.log(error);
